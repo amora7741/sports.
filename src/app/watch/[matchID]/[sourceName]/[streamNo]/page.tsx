@@ -40,6 +40,8 @@ const StreamPage = async ({ params }: StreamPageProps) => {
         <iframe
           className='aspect-video rounded-lg'
           allowFullScreen
+          referrerPolicy='no-referrer'
+          allow='autoplay; fullscreen; picture-in-picture; encrypted-media; popups'
           src={stream.embedUrl}
           title={`Stream ${stream.streamNo} - ${stream.language}`}
         />
