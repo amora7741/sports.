@@ -37,18 +37,18 @@ const Matches = async ({
 
         <div className='w-full border border-b-white/60' />
 
-        <ul className='grid md:grid-cols-2 gap-8 md:gap-y-4'>
+        <ul className='grid md:grid-cols-2 gap-4'>
           {data.map((match) => (
-            <li className='md:h-40 group' key={match.title}>
+            <li className='group' key={match.title}>
               <Link
                 href={`/watch/${match.id}`}
-                className='size-full gap-2 grid grid-cols-[1fr_30px]'
+                className='border border-white/10 p-4 rounded-lg grid grid-cols-[1fr_30px] gap-2 transition-all duration-75 hover:border-white/30 hover:bg-white/5 md:h-40'
               >
                 <div className='flex flex-col md:grid grid-rows-[60px_1fr] gap-2'>
                   <span className='sm:text-lg md:text-xl md:line-clamp-2 font-serif'>
                     {match.title}
                   </span>
-                  <span className='text-xs sm:text-base font-medium text-white/60 group-hover:text-white transition-colors'>
+                  <span className='text-xs sm:text-base font-medium text-white/60 group-hover:text-white transition-colors md:self-end'>
                     {match.category.toUpperCase()}
                   </span>
                 </div>
