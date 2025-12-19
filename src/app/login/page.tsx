@@ -5,13 +5,14 @@ import type React from 'react';
 import { useState } from 'react';
 import ShaderBackground from '@/components/ShaderBackground';
 import { motion } from 'motion/react';
-import { LoaderCircle } from 'lucide-react';
+import { Check, LoaderCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
 export default function LoginPage() {
   const [passcode, setPasscode] = useState('');
   const [loading, setLoading] = useState(false);
-  const [wrongPass, setWrongPass] = useState(false);
+  const [authPassed, setAuthPassed] = useState<boolean | null>(null);
 
   const router = useRouter();
 
@@ -31,8 +32,12 @@ export default function LoginPage() {
       const { auth } = await response.json();
 
       if (!auth) {
+        setAuthPassed(false);
+        setPasscode('');
         return;
       }
+
+      setAuthPassed(true);
 
       setTimeout(() => {
         router.refresh();
@@ -69,10 +74,26 @@ export default function LoginPage() {
                 value={passcode}
                 onChange={handleChange}
                 placeholder='000000'
-                className='w-full px-6 py-4 text-center text-3xl font-mono tracking-[0.5em] bg-white/5 border border-white/20 rounded-xl text-white placeholder:text-white/20 transition-all'
+                className={cn(
+                  'w-full px-6 py-4 text-center text-3xl font-mono tracking-[0.5em] bg-white/5 border border-white/20 rounded-xl text-white placeholder:text-white/20 transition-all',
+                  {
+                    'border-red-500':
+                      typeof authPassed === 'boolean' && !authPassed,
+                  }
+                )}
                 maxLength={6}
                 autoFocus
               />
+
+              {typeof authPassed === 'boolean' && !authPassed && (
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 100, y: 0 }}
+                  className='text-red-500 text-center'
+                >
+                  Invalid passcode.
+                </motion.p>
+              )}
 
               <button
                 type='submit'
@@ -81,6 +102,8 @@ export default function LoginPage() {
               >
                 {loading ? (
                   <LoaderCircle className='animate-spin' />
+                ) : authPassed ? (
+                  <Check />
                 ) : (
                   'Continue'
                 )}
