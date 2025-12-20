@@ -11,15 +11,17 @@ const Match = async ({ params }: { params: Promise<{ matchID: string }> }) => {
 
   if (!match?.sources?.length) notFound();
 
-  const sources = await Promise.all(
-    match.sources.map(async (source) => {
-      const streams = await fetchSources(source.source, source.id);
-      return {
-        source: source.source,
-        streams: streams || [],
-      };
-    })
-  );
+  const sources = (
+    await Promise.all(
+      match.sources.map(async (source) => {
+        const streams = await fetchSources(source.source, source.id);
+        return {
+          source: source.source,
+          streams: streams || [],
+        };
+      })
+    )
+  ).filter((source) => source.streams.length > 0);
 
   const totalStreams = sources.reduce(
     (acc, source) => acc + source.streams.length,
